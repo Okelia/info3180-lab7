@@ -1,12 +1,68 @@
 /* Add your Application JavaScript */
 // Instantiate our main Vue Instance
+const uploadForm= {
+    name: 'UploadForm',
+    template:`
+    <div class="jumbotron">
+        <h1>Upload Form </h1>
+        <form method="POST" enctype="multipart/form-data" @submit.prevent="uploadPhoto" id="uploadForm">
+            <div class="lead">
+                <div>
+                    <label> Description </label>
+                    <textarea name="description" class="form-control"></textarea>
+                    <label> Photo </label>
+                    <input type="file" name="photo" class="form-control">
+                </div>
+
+                <div class=bt>
+                    <button class="btn-primary mb2" @click="uploadPhoto">Upload</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    `,
+
+    data(){
+        return {}
+    },
+    methods:{
+        uploadPhoto(){
+            let uploadForm = document.getElementById('uploadForm');
+            let form_data = new FormData(uploadForm);
+            fetch("/api/upload", {
+                method: 'POST',
+                body: form_data,
+                headers: {
+                    'X-CSRFToken': token
+                     },
+                     credentials: 'same-origin'
+               })
+                .then(function (response) {
+                return response.json();
+                })
+                .then(function (jsonResponse) {
+                // display a success message
+                console.log(jsonResponse);
+                })
+                .catch(function (error) {
+                console.log(error);
+                });     
+    
+        }
+    }
+}
+
 const app = Vue.createApp({
     data() {
         return {
 
         }
+    },
+    component:{
+        'uploadForm': uploadForm
     }
 });
+
 
 app.component('app-header', {
     name: 'AppHeader',
@@ -22,6 +78,9 @@ app.component('app-header', {
           <li class="nav-item active">
             <router-link class="nav-link" to="/">Home <span class="sr-only">(current)</span></router-link>
           </li>
+          <li class="nav-item active">
+            <router-link to="/upload" class="nav-link">Upload Form</router-link>
+          </li> 
         </ul>
       </div>
     </nav>
@@ -72,6 +131,7 @@ const NotFound = {
 // Define Routes
 const routes = [
     { path: "/", component: Home },
+    { path: "/upload", component: uploadForm },
     // Put other routes here
 
     // This is a catch all route in case none of the above matches

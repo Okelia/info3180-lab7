@@ -1,3 +1,9 @@
 body {
     padding-top: 5rem;
 }
+.bt{
+margin-top: 30px;
+}
+.btn-primary {
+    padding: 5px;
+}
