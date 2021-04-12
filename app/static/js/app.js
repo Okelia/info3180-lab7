@@ -5,6 +5,11 @@ const uploadForm= {
     template:`
     <div class="jumbotron">
         <h1>Upload Form </h1>
+        <div class= displaymess>
+            <ul>
+                <li v-for="message in messages">{{message}}</li>
+            </ul>
+        </div>
         <form method="POST" enctype="multipart/form-data" @submit.prevent="uploadPhoto" id="uploadForm">
             <div class="lead">
                 <div>
@@ -23,10 +28,14 @@ const uploadForm= {
     `,
 
     data(){
-        return {}
+        return {
+            messages:[],
+            className:''
+        }
     },
     methods:{
         uploadPhoto(){
+            let self=this;
             let uploadForm = document.getElementById('uploadForm');
             let form_data = new FormData(uploadForm);
             fetch("/api/upload", {
@@ -41,8 +50,15 @@ const uploadForm= {
                 return response.json();
                 })
                 .then(function (jsonResponse) {
+                    if (jsonResponse['payload']){
+                        self.messages = [jsonResponse['payload']['message']];
+                        self.className="uploadinfo"
+                    } else {
+                        self.messages = jsonResponse['upload_errors']['errors'];
+                        self.className="upload_errors"
+                    }
                 // display a success message
-                console.log(jsonResponse);
+                //console.log(jsonResponse);
                 })
                 .catch(function (error) {
                 console.log(error);

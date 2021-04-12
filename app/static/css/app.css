@@ -7,3 +7,8 @@ margin-top: 30px;
 .btn-primary {
     padding: 5px;
 }
+.upload_errors{
+    background-color: rgba(233, 58, 58, 0.692);
+    border: 1px solid rgb(107, 3, 3);
+    padding :5px;
+}
