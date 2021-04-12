@@ -26,7 +26,11 @@ def upload():
             "filename": photo.filename,
             "description": description } 
         return jsonify (payload=payload)
-    return jsonify(form_errors(form))
+    else:
+        upload_errors = {
+            "errors": form_errors(form)
+        }
+        return jsonify(upload_errors=upload_errors)
 
 # Please create all new routes and view functions above this route.
 # This route is now our catch all route for our VueJS single page
